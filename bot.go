@@ -93,7 +93,8 @@ func (bot *Bot) handleMessage(update tgbotapi.Update) {
 		karmaDelta = -1
 	}
 
-	succ, err := bot.addKarma(update.Message.ReplyToMessage.MessageID, update.Message.From.ID, update.Message.ReplyToMessage.From, karmaDelta)
+	replyTo := update.Message.ReplyToMessage
+	succ, err := bot.addKarma(replyTo.MessageID, update.Message.From.ID, replyTo.From, karmaDelta)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -106,6 +107,20 @@ func (bot *Bot) handleMessage(update tgbotapi.Update) {
 	bot.mx.Lock()
 	bot.runNotificationHook(update, karmaDelta)
 	bot.mx.Unlock()
+
+	if bot.isKarmaRemove(messageText) && replyTo.From.ID == bot.Self.ID {
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "kek")
+		msg.ReplyToMessageID = update.Message.MessageID
+
+		r, err := bot.Send(msg)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		bot.handleMessage(tgbotapi.Update{
+			Message: &r,
+		})
+	}
 }
 
 func (bot *Bot) runNotificationHook(update tgbotapi.Update, kDelta int) {
