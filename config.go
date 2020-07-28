@@ -18,7 +18,7 @@ type Config struct {
 	KarmaTopCommand string
 }
 
-const configfile = "config.json"
+const configfile = "data/config.json"
 
 func initConfig() (*Config, error) {
 	s, err := os.Stat(configfile)
@@ -54,7 +54,7 @@ func getDefaultConfig() Config {
 	return Config{
 		BotToken:        "PLACE TELEGRAM TOKEN HERE",
 		AllowSelfKarma:  false,
-		DataFile:        "data.db",
+		DataFile:        "data/data.db",
 		AddKarma:        []string{"+1", "thx", "ty", "thankyou", "thanks", "thanx"},
 		RemoveKarma:     []string{"-1", "rtfm"},
 		KarmaTopCommand: "/ktop",

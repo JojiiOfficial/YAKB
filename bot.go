@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/JojiiOfficial/gaw"
@@ -158,11 +159,11 @@ func (bot *Bot) getKarmaTop(userid int) string {
 }
 
 func (bot *Bot) isKarmaAdd(message string) bool {
-	return gaw.IsInStringArray(message, bot.config.AddKarma)
+	return gaw.IsInStringArray(strings.ToLower(message), bot.config.AddKarma)
 }
 
 func (bot *Bot) isKarmaRemove(message string) bool {
-	return gaw.IsInStringArray(message, bot.config.RemoveKarma)
+	return gaw.IsInStringArray(strings.ToLower(message), bot.config.RemoveKarma)
 }
 
 func (bot *Bot) ignoreMessage(message string) bool {
