@@ -143,7 +143,7 @@ func (bot *Bot) runNotificationHook(update tgbotapi.Update, kDelta int) {
 	} else {
 		txt += " decremented by " + strconv.Itoa(int(math.Abs(float64(kDelta))))
 	}
-	txt += " for @" + user.UserName
+	txt += " for @" + getNameFromUser(user)
 
 	msg := tgbotapi.NewMessage(cid, txt)
 	r, err := bot.Send(msg)
@@ -153,6 +153,14 @@ func (bot *Bot) runNotificationHook(update tgbotapi.Update, kDelta int) {
 	}
 
 	bot.lastChatMessageID[cid] = r.MessageID
+}
+
+func getNameFromUser(user *tgbotapi.User) string {
+	if len(user.UserName) > 0 {
+		return user.UserName
+	}
+
+	return user.FirstName + "" + user.LastName
 }
 
 func (bot *Bot) getKarmaTop(userid int) string {

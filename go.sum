@@ -26,5 +26,5 @@ gopkg.in/benweidig/cli-table.v2 v2.0.0-20180519085552-8b9fa48fb374/go.mod h1:+oJ
 gorm.io/driver/sqlite v1.0.8 h1:omllgSb7/eh9D6lGvLZOdU1ZElxdXuO3dn3Rk+dQxUE=
 gorm.io/driver/sqlite v1.0.8/go.mod h1:xkm8/CEmA3yc4zRd0pdCqm43BjO8Hm6avfTpxWb/7c4=
 gorm.io/gorm v0.2.7/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
-gorm.io/gorm v0.2.24 h1:NKjfopoXim5xAHYkt/uN0n7ZNmyoXZ9FEZUX4ijzXlI=
-gorm.io/gorm v0.2.24/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
+gorm.io/gorm v0.2.26 h1:+GoQpJGwCmKkI8f6yIuSUrG6+cG4EobQeH28gcqTZdM=
+gorm.io/gorm v0.2.26/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=

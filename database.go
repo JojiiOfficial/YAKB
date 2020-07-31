@@ -114,7 +114,7 @@ func (db *DatabaseHandler) getAccountByID(user *tgbotapi.User) (*UserKarma, erro
 	uk = UserKarma{
 		db:       db,
 		UserID:   user.ID,
-		UserName: user.UserName,
+		UserName: getNameFromUser(user),
 	}
 
 	// Create new acc

@@ -9,5 +9,5 @@ require (
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	gopkg.in/benweidig/cli-table.v2 v2.0.0-20180519085552-8b9fa48fb374
 	gorm.io/driver/sqlite v1.0.8
-	gorm.io/gorm v0.2.24
+	gorm.io/gorm v0.2.26
 )
