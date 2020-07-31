@@ -53,18 +53,7 @@ func (bot *Bot) handleMessage(update tgbotapi.Update) {
 
 	isReply := update.Message.ReplyToMessage != nil
 
-	if bot.isCommand(messageText, bot.config.KarmaTopCommand) {
-		var id int
-		if isReply {
-			id = update.Message.ReplyToMessage.From.ID
-		}
-
-		msgTxt := bot.getKarmaTop(id)
-		if len(msgTxt) > 0 {
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgTxt)
-			bot.Send(msg)
-		}
-
+	if !bot.hookCommands(update) {
 		return
 	}
 
@@ -121,6 +110,28 @@ func (bot *Bot) handleMessage(update tgbotapi.Update) {
 			Message: &r,
 		})
 	}
+}
+
+func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
+	messageText := update.Message.Text
+	isReply := update.Message.ReplyToMessage != nil
+
+	if bot.isCommand(messageText, bot.config.KarmaTopCommand) {
+		var id int
+		if isReply {
+			id = update.Message.ReplyToMessage.From.ID
+		}
+
+		msgTxt := bot.getKarmaTop(id)
+		if len(msgTxt) > 0 {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgTxt)
+			bot.Send(msg)
+		}
+
+		return false
+	}
+
+	return true
 }
 
 func (bot *Bot) isCommand(input, dest string) bool {
