@@ -53,7 +53,7 @@ func (bot *Bot) handleMessage(update tgbotapi.Update) {
 
 	isReply := update.Message.ReplyToMessage != nil
 
-	if messageText == bot.config.KarmaTopCommand {
+	if bot.isCommand(messageText, bot.config.KarmaTopCommand) {
 		var id int
 		if isReply {
 			id = update.Message.ReplyToMessage.From.ID
@@ -121,6 +121,16 @@ func (bot *Bot) handleMessage(update tgbotapi.Update) {
 			Message: &r,
 		})
 	}
+}
+
+func (bot *Bot) isCommand(input, dest string) bool {
+	dests := []string{"!" + dest, "/" + dest, "!" + dest + "@" + bot.Self.UserName, "/" + dest + "@" + bot.Self.UserName}
+
+	if !strings.HasPrefix(input, "!") && strings.HasPrefix(input, "@") {
+		return false
+	}
+
+	return gaw.IsInStringArray(input, dests)
 }
 
 func (bot *Bot) runNotificationHook(update tgbotapi.Update, kDelta int) {
