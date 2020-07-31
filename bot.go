@@ -63,7 +63,7 @@ func (bot *Bot) handleMessage(update tgbotapi.Update) {
 	}
 
 	// Ignore other messages
-	if bot.ignoreMessage(messageText) {
+	if bot.ignoreMessage(update) {
 		return
 	}
 
@@ -210,8 +210,8 @@ func (bot *Bot) isKarmaRemove(message string) bool {
 	return gaw.IsInStringArray(strings.ToLower(message), bot.config.RemoveKarma)
 }
 
-func (bot *Bot) ignoreMessage(message string) bool {
-	return !bot.isKarmaAdd(message) && !bot.isKarmaRemove(message)
+func (bot *Bot) ignoreMessage(update tgbotapi.Update) bool {
+	return !bot.isKarmaAdd(update.Message.Text) && !bot.isKarmaRemove(update.Message.Text) || (!bot.config.AllowBotVoting && update.Message.ReplyToMessage.From.IsBot)
 }
 
 func (bot *Bot) await() {

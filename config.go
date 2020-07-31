@@ -16,6 +16,7 @@ type Config struct {
 	RemoveKarma     []string
 	DataFile        string
 	KarmaTopCommand string
+	AllowBotVoting  bool
 }
 
 const configfile = "data/config.json"
