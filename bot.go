@@ -125,6 +125,7 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 		msgTxt := bot.getKarmaTop(id)
 		if len(msgTxt) > 0 {
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgTxt)
+			msg.ParseMode = "markdown"
 			bot.Send(msg)
 		}
 
@@ -199,7 +200,7 @@ func (bot *Bot) getKarmaTop(userid int) string {
 		table.AddRow(karmas[i].Amount, karmas[i].UserName)
 	}
 
-	return table.String()
+	return "`" + table.String() + "`"
 }
 
 func (bot *Bot) isKarmaAdd(message string) bool {
