@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 // Config represents the structure
@@ -74,4 +75,36 @@ func (config Config) Save() error {
 	}
 
 	return ioutil.WriteFile(configfile, d, 0600)
+}
+
+func (config *Config) removeTrigger(text string, triggerType int) error {
+	if triggerType == 1 {
+		config.AddKarma = removeStringArr(config.AddKarma, text)
+	}
+	if triggerType == -1 {
+		config.RemoveKarma = removeStringArr(config.RemoveKarma, text)
+	}
+
+	return config.Save()
+}
+
+func removeStringArr(a []string, txt string) []string {
+	i := -1
+
+	for j := range a {
+		if strings.ToLower(txt) == strings.ToLower(a[j]) {
+			i = j
+			break
+		}
+	}
+
+	// Return a if not found
+	if i == -1 {
+		return a
+	}
+
+	a[i] = a[len(a)-1] // Copy last element to index i.
+	a[len(a)-1] = ""   // Erase last element (write zero value).
+	a = a[:len(a)-1]
+	return a
 }

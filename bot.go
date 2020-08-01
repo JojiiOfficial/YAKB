@@ -124,9 +124,7 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 
 		msgTxt := bot.getKarmaTop(id)
 		if len(msgTxt) > 0 {
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgTxt)
-			msg.ParseMode = "markdown"
-			bot.Send(msg)
+			bot.sendText(update.Message.Chat.ID, msgTxt)
 		}
 
 		return false
@@ -144,12 +142,7 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 			msg += "- " + bot.config.RemoveKarma[i] + "\n"
 		}
 
-		msg += "`"
-
-		tgMsg := tgbotapi.NewMessage(update.Message.Chat.ID, msg)
-		tgMsg.ParseMode = "markdown"
-		bot.Send(tgMsg)
-
+		bot.sendText(update.Message.Chat.ID, msg+"`")
 		return false
 	}
 
@@ -169,7 +162,6 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 		if !strings.Contains(messageText, " ") {
 			if !isReply {
 				bot.sendText(update.Message.Chat.ID, "Either reply to a message with this command or type:\n`/addtrigger <trigger> <(+1/-1)>`")
-
 				return false
 			}
 
@@ -195,6 +187,8 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 		}
 
 		if len(triggerText) > 0 && (triggerType == 1 || triggerType == -1) {
+			triggerText = strings.ToLower(triggerText)
+
 			if bot.isKarmaAdd(triggerText) || bot.isKarmaRemove(triggerText) {
 				bot.sendText(update.Message.Chat.ID, "Trigger already defined!")
 				return false
@@ -217,6 +211,47 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 		}
 
 		bot.sendText(update.Message.Chat.ID, "Something went wrong!")
+		return false
+	}
+
+	// Remove trigger command
+	if bot.isCommand(messageText, "rmtrigger") {
+		if as := bot.isAdmin(update.Message.Chat.ID, update.Message.From.ID); as != 0 {
+			if as == 0 {
+				bot.sendText(update.Message.Chat.ID, "You have to be an admin to perform this command!")
+			}
+
+			return false
+		}
+
+		smsg := strings.Split(messageText, " ")
+
+		// Validate prams
+		if len(smsg) < 2 {
+			bot.sendText(update.Message.Chat.ID, "Usage: `/rmtrigger <trigger>`")
+			return false
+		}
+
+		triggerText := strings.ToLower(smsg[1])
+		if len(triggerText) > 0 {
+			triggerType := bot.findTrigger(triggerText)
+
+			// Return if trigger not found
+			if triggerType == 0 {
+				bot.sendText(update.Message.Chat.ID, "Trigger `"+triggerText+"` not found")
+				return false
+			}
+
+			// Remove trigger
+			err := bot.config.removeTrigger(triggerText, triggerType)
+			if err != nil {
+				bot.sendText(update.Message.Chat.ID, "A server error occured. Try again later")
+				return false
+			}
+
+			bot.sendText(update.Message.Chat.ID, "Trigger `"+triggerText+"` removed sucessfully!")
+		}
+
 		return false
 	}
 

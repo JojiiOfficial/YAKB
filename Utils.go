@@ -49,3 +49,20 @@ func (bot *Bot) isAdmin(chatID int64, userID int) int {
 
 	return 0
 }
+
+// Return the type of trigger, '0' if not found
+func (bot *Bot) findTrigger(trigger string) int {
+	for _, ak := range bot.config.AddKarma {
+		if ak == trigger {
+			return 1
+		}
+	}
+
+	for _, rk := range bot.config.RemoveKarma {
+		if rk == trigger {
+			return -1
+		}
+	}
+
+	return 0
+}
