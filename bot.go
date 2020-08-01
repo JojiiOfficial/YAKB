@@ -196,7 +196,7 @@ func (bot *Bot) getKarmaTop(userid int) string {
 	table.Padding = 1
 
 	for i := range karmas {
-		table.AddRow(karmas[i].UserName, karmas[i].Amount)
+		table.AddRow(karmas[i].Amount, karmas[i].UserName)
 	}
 
 	return table.String()
