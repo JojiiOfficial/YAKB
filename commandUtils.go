@@ -14,6 +14,11 @@ func (bot *Bot) isCommand(input, dest string) bool {
 		return false
 	}
 
+	// Only use first word
+	if len(strings.Split(input, " ")) > 1 {
+		input = strings.Split(input, " ")[0]
+	}
+
 	return gaw.IsInStringArray(input, dests)
 }
 
