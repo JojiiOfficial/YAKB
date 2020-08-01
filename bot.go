@@ -155,6 +155,14 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 
 	// Add a trigger
 	if bot.isCommand(messageText, "addtrigger") {
+		if as := bot.isAdmin(update.Message.Chat.ID, update.Message.From.ID); as != 0 {
+			if as == 0 {
+				bot.sendText(update.Message.Chat.ID, "You have to be an admin to perform this command!")
+			}
+
+			return false
+		}
+
 		var triggerText string
 		triggerType := 1
 

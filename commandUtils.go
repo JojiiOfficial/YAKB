@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/JojiiOfficial/gaw"
@@ -28,4 +29,23 @@ func getNameFromUser(user *tgbotapi.User) string {
 	}
 
 	return user.FirstName + "" + user.LastName
+}
+
+func (bot *Bot) isAdmin(chatID int64, userID int) int {
+	member, err := bot.GetChatMember(tgbotapi.ChatConfigWithUser{
+		ChatID: chatID,
+		UserID: userID,
+	})
+
+	if err != nil {
+		bot.sendText(chatID, "A server error occured. Try again later")
+		fmt.Println(err)
+		return -1
+	}
+
+	if member.IsAdministrator() || member.IsCreator() {
+		return 1
+	}
+
+	return 0
 }
