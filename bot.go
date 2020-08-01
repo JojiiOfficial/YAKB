@@ -148,7 +148,7 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 
 	// Add a trigger
 	if bot.isCommand(messageText, "addtrigger") {
-		if as := bot.isAdmin(update.Message.Chat.ID, update.Message.From.ID); as != 0 {
+		if as := bot.isAdmin(update.Message.Chat.ID, update.Message.From.ID); as != 1 {
 			if as == 0 {
 				bot.sendText(update.Message.Chat.ID, "You have to be an admin to perform this command!")
 			}
@@ -216,7 +216,7 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 
 	// Remove trigger command
 	if bot.isCommand(messageText, "rmtrigger") {
-		if as := bot.isAdmin(update.Message.Chat.ID, update.Message.From.ID); as != 0 {
+		if as := bot.isAdmin(update.Message.Chat.ID, update.Message.From.ID); as != 1 {
 			if as == 0 {
 				bot.sendText(update.Message.Chat.ID, "You have to be an admin to perform this command!")
 			}
