@@ -132,17 +132,28 @@ func (bot *Bot) hookCommands(update tgbotapi.Update) bool {
 		return false
 	}
 
-	return true
-}
+	// Listing Triggers
+	if bot.isCommand(messageText, "triggers") {
+		msg := "Triggers:\n`"
 
-func (bot *Bot) isCommand(input, dest string) bool {
-	dests := []string{"!" + dest, "/" + dest, "!" + dest + "@" + bot.Self.UserName, "/" + dest + "@" + bot.Self.UserName}
+		for i := range bot.config.AddKarma {
+			msg += "+ " + bot.config.AddKarma[i] + "\n"
+		}
 
-	if !strings.HasPrefix(input, "!") && strings.HasPrefix(input, "@") {
+		for i := range bot.config.RemoveKarma {
+			msg += "- " + bot.config.RemoveKarma[i] + "\n"
+		}
+
+		msg += "`"
+
+		tgMsg := tgbotapi.NewMessage(update.Message.Chat.ID, msg)
+		tgMsg.ParseMode = "markdown"
+		bot.Send(tgMsg)
+
 		return false
 	}
 
-	return gaw.IsInStringArray(input, dests)
+	return true
 }
 
 func (bot *Bot) runNotificationHook(update tgbotapi.Update, kDelta int) {
@@ -175,14 +186,6 @@ func (bot *Bot) runNotificationHook(update tgbotapi.Update, kDelta int) {
 	}
 
 	bot.lastChatMessageID[cid] = r.MessageID
-}
-
-func getNameFromUser(user *tgbotapi.User) string {
-	if len(user.UserName) > 0 {
-		return user.UserName
-	}
-
-	return user.FirstName + "" + user.LastName
 }
 
 func (bot *Bot) getKarmaTop(userid int) string {
